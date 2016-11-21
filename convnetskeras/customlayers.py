@@ -11,7 +11,8 @@ def crosschannelnormalization(alpha = 1e-4, k=2, beta=0.75, n=5,**kwargs):
     Alexnet
     """
     def f(X):
-        b, ch, r, c = X.shape
+        K.set_image_dim_ordering('th')
+        b, ch, r, c = X.get_shape()
         half = n // 2
         square = K.square(X)
         extra_channels = K.spatial_2d_padding(K.permute_dimensions(square, (0,2,3,1))
@@ -19,7 +20,7 @@ def crosschannelnormalization(alpha = 1e-4, k=2, beta=0.75, n=5,**kwargs):
         extra_channels = K.permute_dimensions(extra_channels, (0,3,1,2))
         scale = k
         for i in range(n):
-            scale += alpha * extra_channels[:,i:i+ch,:,:]
+            scale += alpha * extra_channels[:,i:i+int(ch),:,:]
         scale = scale ** beta
         return X / scale
 
@@ -29,7 +30,7 @@ def crosschannelnormalization(alpha = 1e-4, k=2, beta=0.75, n=5,**kwargs):
 
 def splittensor(axis=1, ratio_split=1, id_split=0,**kwargs):
     def f(X):
-        div = X.shape[axis] // ratio_split
+        div = int(X.get_shape()[axis]) // ratio_split
 
         if axis == 0:
             output =  X[id_split*div:(id_split+1)*div,:,:,:]

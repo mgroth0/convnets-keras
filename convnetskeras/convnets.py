@@ -3,6 +3,7 @@ from keras.layers import Flatten, Dense, Dropout, Reshape, Permute, Activation, 
     Input, merge
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.optimizers import SGD
+from keras import backend as K
 import numpy as np
 from scipy.misc import imread, imresize, imsave
 
@@ -220,6 +221,8 @@ def VGG_19(weights_path=None,heatmap=False):
 
 
 def AlexNet(weights_path=None, heatmap=False):
+    K.set_image_dim_ordering('th')
+    
     if heatmap:
         inputs = Input(shape=(3,None,None))
     else:
