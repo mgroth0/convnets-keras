@@ -55,6 +55,7 @@ def convnet(network, weights_path=None, heatmap=False,
         Dict of feature layers, asked for in output_layers.
     """
 
+    K.set_image_dim_ordering('th')
 
     # Select the network
     if network == 'vgg_16':
@@ -221,8 +222,6 @@ def VGG_19(weights_path=None,heatmap=False):
 
 
 def AlexNet(weights_path=None, heatmap=False):
-    K.set_image_dim_ordering('th')
-    
     if heatmap:
         inputs = Input(shape=(3,None,None))
     else:
