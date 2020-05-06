@@ -9,7 +9,6 @@ from keras.layers import Dense
 from keras.layers import Dropout
 from keras.layers import Flatten
 from keras.layers import Input
-from keras.layers import merge
 from keras.layers.convolutional import Convolution2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.layers.convolutional import ZeroPadding2D
@@ -18,6 +17,8 @@ from keras.models import Sequential
 from keras.optimizers import SGD
 from scipy.misc import imread
 from scipy.misc import imresize
+
+from keras.layers import Concatenate
 
 
 def convnet(network, weights_path=None, heatmap=False, trainable=None):
@@ -240,10 +241,10 @@ def AlexNet(weights_path=None, heatmap=False):
     conv_2 = MaxPooling2D((3, 3), strides=(2, 2))(conv_1)
     conv_2 = crosschannelnormalization(name='convpool_1')(conv_2)
     conv_2 = ZeroPadding2D((2, 2))(conv_2)
-    conv_2 = merge([
+    conv_2 = Concatenate(axis=1,name='conv_2')([
                        Convolution2D(128, 5, 5, activation='relu', name='conv_2_' + str(i + 1))(
                            splittensor(ratio_split=2, id_split=i)(conv_2)
-                       ) for i in range(2)], mode='concat', concat_axis=1, name='conv_2')
+                       ) for i in range(2)])
 
     conv_3 = MaxPooling2D((3, 3), strides=(2, 2))(conv_2)
     conv_3 = crosschannelnormalization()(conv_3)
@@ -251,16 +252,16 @@ def AlexNet(weights_path=None, heatmap=False):
     conv_3 = Convolution2D(384, 3, 3, activation='relu', name='conv_3')(conv_3)
 
     conv_4 = ZeroPadding2D((1, 1))(conv_3)
-    conv_4 = merge([
+    conv_4 = Concatenate(axis=1,name='conv_4')([
                        Convolution2D(192, 3, 3, activation='relu', name='conv_4_' + str(i + 1))(
                            splittensor(ratio_split=2, id_split=i)(conv_4)
-                       ) for i in range(2)], mode='concat', concat_axis=1, name='conv_4')
+                       ) for i in range(2)])
 
     conv_5 = ZeroPadding2D((1, 1))(conv_4)
-    conv_5 = merge([
+    conv_5 = Concatenate(axis=1,name='conv_5')([
                        Convolution2D(128, 3, 3, activation='relu', name='conv_5_' + str(i + 1))(
                            splittensor(ratio_split=2, id_split=i)(conv_5)
-                       ) for i in range(2)], mode='concat', concat_axis=1, name='conv_5')
+                       ) for i in range(2)])
 
     dense_1 = MaxPooling2D((3, 3), strides=(2, 2), name='convpool_5')(conv_5)
 

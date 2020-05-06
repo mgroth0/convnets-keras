@@ -3,7 +3,6 @@ from keras import backend as K
 from keras.engine import Layer
 from keras.layers.convolutional import Convolution2D
 from keras.layers.core import Lambda
-from keras.layers.core import Merge
 
 
 def crosschannelnormalization(alpha=1e-4, k=2, beta=0.75, n=5, **kwargs):
@@ -52,16 +51,16 @@ def splittensor(axis=1, ratio_split=1, id_split=0, **kwargs):
 
     return Lambda(f, output_shape=lambda input_shape: g(input_shape), **kwargs)
 
-
+from keras.layers import Concatenate
 def convolution2Dgroup(n_group, nb_filter, nb_row, nb_col, **kwargs):
     def f(input):
-        return Merge([
+        return Concatenate(axis=1)([
                          Convolution2D(nb_filter // n_group, nb_row, nb_col)(
                              splittensor(axis=1,
                                          ratio_split=n_group,
                                          id_split=i)(input))
                          for i in range(n_group)
-                         ], mode='concat', concat_axis=1)
+                         ])
 
     return f
 
