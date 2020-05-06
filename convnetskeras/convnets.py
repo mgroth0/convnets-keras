@@ -22,7 +22,7 @@ from imageio import imread
 from PIL import Image
 
 from keras import backend as K
-K.common.set_image_dim_ordering('tf')
+K.common.set_image_dim_ordering('th')
 
 
 def convnet(network, weights_path=None, heatmap=False, trainable=None):
