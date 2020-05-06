@@ -21,6 +21,9 @@ from keras.layers import Concatenate
 from imageio import imread
 from PIL import Image
 
+from keras import backend as K
+K.set_image_dim_ordering('tf')
+
 def convnet(network, weights_path=None, heatmap=False, trainable=None):
     """
     Returns a keras model for a CNN.
