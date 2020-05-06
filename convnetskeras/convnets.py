@@ -21,8 +21,6 @@ from keras.layers import Concatenate
 from imageio import imread
 from PIL import Image
 
-from keras import backend as K
-K.common.set_image_dim_ordering('th')
 
 
 def convnet(network, weights_path=None, heatmap=False, trainable=None):
@@ -235,9 +233,9 @@ def VGG_19(weights_path=None, heatmap=False):
 
 def AlexNet(weights_path=None, heatmap=False):
     if heatmap:
-        inputs = Input(shape=(3, None, None))
+        inputs = Input(shape=(None, None,3))
     else:
-        inputs = Input(shape=(3, 227, 227))
+        inputs = Input(shape=(227, 227,3))
 
     conv_1 = Convolution2D(96, 11, 11, subsample=(4, 4), activation='relu',
                            name='conv_1')(inputs)
