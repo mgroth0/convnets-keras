@@ -15,11 +15,11 @@ from keras.layers.convolutional import ZeroPadding2D
 from keras.models import Model
 from keras.models import Sequential
 from keras.optimizers import SGD
-from scipy.misc import imread
-from scipy.misc import imresize
 
 from keras.layers import Concatenate
 
+from imageio import imread
+from PIL import Image
 
 def convnet(network, weights_path=None, heatmap=False, trainable=None):
     """
@@ -302,7 +302,7 @@ def preprocess_image_batch(image_paths, img_size=None, crop_size=None, color_mod
     for im_path in image_paths:
         img = imread(im_path, mode='RGB')
         if img_size:
-            img = imresize(img, img_size)
+            img = np.array(Image.fromarray(img).resize(img_size))
 
         img = img.astype('float32')
         # We normalize the colors (in RGB space) with the empirical means on the training set
