@@ -5,7 +5,8 @@ from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2
 from keras.optimizers import SGD
 from keras import backend as K
 import numpy as np
-from scipy.misc import imread, imresize, imsave
+from imageio import imread
+from scipy.misc import imresize, imsave
 
 from convnetskeras.customlayers import convolution2Dgroup, crosschannelnormalization, \
     splittensor, Softmax4D
