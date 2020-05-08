@@ -1,3 +1,4 @@
+from PIL.Image import Image
 from keras.models import Sequential, Model
 from keras.layers import Flatten, Dense, Dropout, Reshape, Permute, Activation, \
     Input, merge
@@ -6,7 +7,10 @@ from keras.optimizers import SGD
 from keras import backend as K
 import numpy as np
 from imageio import imread
-from scipy.misc import imresize, imsave
+from scipy.misc import imsave
+
+def imresize(arr,*args,**kwargs):
+    np.array(Image.fromarray(arr).resize(args,kwargs))
 
 from convnetskeras.customlayers import convolution2Dgroup, crosschannelnormalization, \
     splittensor, Softmax4D
