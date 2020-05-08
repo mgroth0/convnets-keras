@@ -6,8 +6,10 @@ from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2
 from keras.optimizers import SGD
 from keras import backend as K
 import numpy as np
-from imageio import imread
-from scipy.misc import imsave
+from imageio import imread,imwrite
+
+def imsave(*args, **kwds):
+    imwrite(args,kwds)
 
 def imresize(arr,*args,**kwargs):
     np.array(Image.fromarray(arr).resize(args,kwargs))
